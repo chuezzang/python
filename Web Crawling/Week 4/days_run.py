@@ -115,36 +115,36 @@ for page in range(1, 2): #16):
 
 print (tour_list, len(tour_list)) # 갯수 확인
 
-# 수집한 정보 개수를 루프 -> 페이지 방문 -> 콘텐츠 획득 (상품상세정보) : BeautfulSoup을 사용 -> DB에 입력
-for tour in tour_list:
-    # tour ->> TourInfo
-    print (type(tour)) #내장함수 Type을 통해 확인 가능
-    # 스크립트를 바로 실행하면, 새창이 열려 리소스 부족 현상이 발생할 수 있으므로,
-    # 동일 탭에서 실행될 수 있도록 설정해야 함.
-    # 링크 데이터에서 실 데이터 획득
-    # 분해
-    arr = tour.link .split(',') # 링크를 2 덩어어리로 분해
+# # 수집한 정보 개수를 루프 -> 페이지 방문 -> 콘텐츠 획득 (상품상세정보) : BeautfulSoup을 사용 -> DB에 입력
+# for tour in tour_list:
+#     # tour ->> TourInfo
+#     print (type(tour)) #내장함수 Type을 통해 확인 가능
+#     # 스크립트를 바로 실행하면, 새창이 열려 리소스 부족 현상이 발생할 수 있으므로,
+#     # 동일 탭에서 실행될 수 있도록 설정해야 함.
+#     # 링크 데이터에서 실 데이터 획득
+#     # 분해
+#     arr = tour.link .split(',') # 링크를 2 덩어어리로 분해
     
-    if arr:
-        # 대체
-        link = arr[0].replace('searchModule.OnClickDetail(','') # 이렇게 사용해도 되는 이유는 규칙적으로 반복하기 때문에 가능
-        # 슬라이싱 -> 앞에 ', 뒤에 ' 제거
-        detail_url = link[1:-1] # 앞뒤로 하나씩 잘라내는 방식임. 
-        # 상세 페이지 이동 : URL 값이 완성된 형태인지 확인 (http~~~)
-        driver.get(detail_url)
-        time.sleep(2)
+#     if arr:
+#         # 대체
+#         link = arr[0].replace('searchModule.OnClickDetail(','') # 이렇게 사용해도 되는 이유는 규칙적으로 반복하기 때문에 가능
+#         # 슬라이싱 -> 앞에 ', 뒤에 ' 제거
+#         detail_url = link[1:-1] # 앞뒤로 하나씩 잘라내는 방식임. 
+#         # 상세 페이지 이동 : URL 값이 완성된 형태인지 확인 (http~~~)
+#         driver.get(detail_url)
+#         time.sleep(2)
 
-        # 현재 페이지를 BeautifulSoup의 DOM으로 구성
-        soup = bs(driver.page_source, 'html.parser') # 현재페이지의 URL
-        # 현재 상세정보 페이지에서 스케쥴 정보를 획득
-        data = soup.select('.schedule-all')  # BS4의 CSS Selector
-        print(type(data), len(data))
+#         # 현재 페이지를 BeautifulSoup의 DOM으로 구성
+#         soup = bs(driver.page_source, 'html.parser') # 현재페이지의 URL
+#         # 현재 상세정보 페이지에서 스케쥴 정보를 획득
+#         data = soup.select('.schedule-all')  # BS4의 CSS Selector
+#         print(type(data), len(data))
 
-# 브라우저 닫기, 끝내기
-driver.close() # 닫기
-driver.quit()  # 끝내기
+# # 브라우저 닫기, 끝내기
+# driver.close() # 닫기
+# driver.quit()  # 끝내기
 
-import sys
-sys.exit()     # 프로세스 끝내기
+# import sys
+# sys.exit()     # 프로세스 끝내기
 
 
