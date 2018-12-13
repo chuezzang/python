@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import getpass
+from bs4 import BeautifulSoup
 import json
 import os
 
@@ -14,7 +15,6 @@ image_num = 100
 username = input("Input ID : ")  # User ID
 password = getpass.getpass("Input PW : ")  # User PWD
 hashTag = input("Input HashTag # : ")  # Search #
-BASE_DIR = "./download_pic/"
 
 # 해시태그 사용유무 체크
 # checkTag = hashTag.find('#')
@@ -72,8 +72,7 @@ print('검색결과  Total : ' + searchTotalCount + ' 건 의 게시물이 검�
 
 # 이미지 찾아 저장하기
 try:
-    resultValues = {}
-    row = 0
+    resultValues = []
     elem = driver.find_element_by_css_selector('body')
     page_images = driver.find_elements_by_css_selector('.eLAPa .KL4Bh')
     current_images = len(page_images)
@@ -82,11 +81,7 @@ try:
         
         for image in page_images:
             obj = image.find_element_by_css_selector('img').get_attribute('src')
-            resultValues[row] = obj
-            row += 1
-        # json 파일로 저장하기
-        with open(os.path.join(BASE_DIR, 'result.json'), 'w+') as json_file:
-            json.dump(resultValues, json_file)
+            resultValues.append(obj)
 
         elem.send_keys(u'\ue00f')
         time.sleep(5)
@@ -99,6 +94,24 @@ try:
 
 except Exception as err:
     print('이미지 로드 오류', err)
+
+# 파일로 저장하기
+
+
+soup = driver.get('https://www.instagram.com/explore/tags/' + hashTag)
+html = driver.page_source
+soup = BeautifulSoup(html, 'html.parser')  # BeautifulSoup사용하기
+images = soup.select('div > a > div.eLAPa > div.KL4Bh > img')
+
+data = {}
+i = 0
+for img in images:
+    # print(n.get('src'))
+    data[i] = img.get('src')
+    i += 1
+
+with open(os.path.join(BASE_DIR, 'result.json'), 'w+') as json_file:
+    json.dump(data, json_file)
 
 # 브라우저 닫기, 끝내기
 driver.close()  # 닫기
